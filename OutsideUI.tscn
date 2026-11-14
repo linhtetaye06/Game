@@ -3,8 +3,3 @@
 [node name="OutsideUi" type="Control" unique_id=1742708983]
 layout_mode = 3
 anchors_preset = 0
-
-[node name="TextureRect" type="TextureRect" parent="." unique_id=985303375]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
