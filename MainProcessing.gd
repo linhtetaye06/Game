@@ -1,5 +1,8 @@
 class_name MoonBaseGame
 extends Node
+
+var month:int = 1
+
 var warning_label: Label = null
 
 var raw_regolith_tonnes: float = 5.0
@@ -24,6 +27,12 @@ var max_large_battery: float = 1000.0
 
 var storage_loss_coefficient: float = 0.10
 
+var refined_regolith: float = 0.0
+
+var quota:float = 0.0
+
+var total_missed_quotas:int = 0
+
 func _init() -> void:
 	devices = {
 		"solar_1": Device.new("Solar Panel 1", 0.0, 35.0, true),
@@ -38,9 +47,9 @@ func _init() -> void:
 		"miner": Device.new("Regolith Miner", 20.0, 0.0, false),
 		"extractor": Device.new("Extractor", 100.0, 0.0, false),
 		"shielding": Device.new("Shielding",5.0,0.0,true),
-		"Converting" : Device.new("Processing",250,0.0,false),
+		"processor" : Device.new("Processor",250,0.0,false),
 	}
-	
+
 
 func show_screen_warning(text: String) -> void:
 	if warning_label:
@@ -70,19 +79,71 @@ func process_mining_and_extraction(has_power: bool) -> void:
 	if not has_power:
 		return
 
-	if devices["small_miner"].is_on:
+	if devices["miner"].is_on:
 		var mined_tonnes: float = randf_range(2.0, 5.0)
 		raw_regolith_tonnes += mined_tonnes
 		show_screen_warning(" Miner gained %.1f tonnes of regolith." % mined_tonnes)
-
+		
 	if devices["extractor"].is_on:
 		if raw_regolith_tonnes >= 1.0:
-			raw_regolith_tonnes -= 1.0
-			var extracted_kg: float = randf_range(10.0, 26.0)
-			fuel_kg += extracted_kg
-			show_screen_warning("Extractor produced %.1f kg of fuel." % extracted_kg)
+			var consumed_raw: float = 1.0
+			raw_regolith_tonnes -= consumed_raw
+			
+			# Reduces the mass by 20% (leaving 80% as pure/refined material)
+			var refined_tonnes: float = consumed_raw * 0.8 
+			refined_regolith += refined_tonnes
+			
+			show_screen_warning("Extractor processed ore: -1.0t raw -> +%.2ft refined regolith (20% waste)." % refined_tonnes)
 		else:
-			show_screen_warning(" Extractor idle: Need raw regolith!")
+			show_screen_warning("Extractor idle: Need raw regolith!")
+	
+	if devices["processor"].is_on:
+		if refined_regolith >= 0.5:
+			refined_regolith -= 0.5
+			var extracted_fuel: float = randf_range(10.0, 26.0)
+			fuel_kg += extracted_fuel
+			show_screen_warning("Fuel Converter produced %.1f kg of fuel." % extracted_fuel)
+		else:
+			show_screen_warning("Fuel Converter idle: Need refined regolith!")
+
+func burn_fuel(kg_to_burn: float) -> void:
+	if not battery_installed:
+		show_screen_warning("Standard battery required for fuel burning.")
+		return
+		
+	if kg_to_burn <= 0 or kg_to_burn > fuel_kg:
+		show_screen_warning("Invalid fuel amount specified.")
+		return
+		
+	var energy_gained: float = kg_to_burn * 25.0
+	if battery + energy_gained > max_battery:
+		show_screen_warning("Exceeds battery capacity!")
+		return
+		
+	fuel_kg -= kg_to_burn
+	battery += energy_gained
+	show_screen_warning("Burned %.1f kg fuel -> +%.1f kWh!" % [kg_to_burn, energy_gained])
+
+func check_monthly_quota() -> bool:
+	if fuel_kg >= quota:
+		fuel_kg -= quota
+		show_screen_warning("Monthly quota fulfilled! Deducted %.1f kg of fuel." % quota)
+		month += 1
+		quota = round(quota * 1.30)
+		food_off_days = 0
+		return true
+	else:
+		total_missed_quotas += 1
+		show_screen_warning("Quota missed! (Total missed: %d/5)" % total_missed_quotas)
+		
+		if total_missed_quotas >= 5:
+			show_screen_warning("GAME OVER: Missed quota 5 times total!")
+			return false
+			
+		month += 1
+		quota = round(quota * 1.30)
+		food_off_days = 0
+		return true
 
 func run_day_phase(day_in_month: int) -> void:
 	show_screen_warning("--- DAY %d: Solar Active ---" % day_in_month)
@@ -122,3 +183,38 @@ func run_day_phase(day_in_month: int) -> void:
 
 	process_mining_and_extraction(has_power)
 	
+func run_night_phase(day_in_month: int) -> void:
+	
+	show_screen_warning("--- NIGHT %d: Backup Power Active ---" % day_in_month)
+	
+	var total_consumption: float = 0.0
+	for dev in devices.values():
+		if dev.is_on:
+			total_consumption += dev.consumption
+			
+	var remaining_load: float = total_consumption
+	
+	if battery_installed and battery > 0:
+		if battery >= remaining_load:
+			battery -= remaining_load
+			remaining_load = 0.0
+		else:
+			remaining_load -= battery
+			battery = 0.0
+				
+	if remaining_load > 0 and large_battery_installed and large_battery > 0:
+		var effective_draw: float = remaining_load / (1.0 - storage_loss_coefficient)
+		if large_battery >= effective_draw:
+			large_battery -= effective_draw
+			remaining_load = 0.0
+		else:
+			large_battery = 0.0
+
+	var has_power: bool = true
+	if remaining_load > 0:
+		show_screen_warning("BLACKOUT! Batteries drained completely!")
+		has_power = false
+	else:
+		has_power = (battery_installed and battery >= 0) or (large_battery_installed and large_battery >= 0)
+
+	process_mining_and_extraction(has_power)
