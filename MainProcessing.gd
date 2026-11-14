@@ -1,6 +1,8 @@
 class_name MoonBaseGame
 extends Node
 
+signal stats_updated 
+
 var month:int = 1
 
 var warning_label: Label = null
@@ -29,7 +31,7 @@ var storage_loss_coefficient: float = 0.10
 
 var refined_regolith: float = 0.0
 
-var quota:float = 0.0
+var quota:float = 100.0
 
 var total_missed_quotas:int = 0
 
@@ -57,15 +59,15 @@ func show_screen_warning(text: String) -> void:
 		
 func apply_wear_and_tear() -> void:
 	for dev in devices.values():
-		if dev.is_on:
+		if dev.device_on:
 			dev.durability = max(0.0, dev.durability - 1.5)
 			
 func check_survival_conditions() -> bool:
-	if not devices["life_support"].is_on:
+	if not devices["life_support"].device_on:
 		show_screen_warning("💀 GAME OVER: Life Support offline! Crew asphyxiated.")
 		return false
 
-	if not devices["food"].is_on:
+	if not devices["food"].device_on:
 		food_off_days += 1
 		show_screen_warning("⚠️ Food Production OFF! Days without food: %d/7" % food_off_days)
 	
@@ -79,12 +81,12 @@ func process_mining_and_extraction(has_power: bool) -> void:
 	if not has_power:
 		return
 
-	if devices["miner"].is_on:
+	if devices["miner"].device_on:
 		var mined_tonnes: float = randf_range(2.0, 5.0)
 		raw_regolith_tonnes += mined_tonnes
 		show_screen_warning(" Miner gained %.1f tonnes of regolith." % mined_tonnes)
 		
-	if devices["extractor"].is_on:
+	if devices["extractor"].device_on:
 		if raw_regolith_tonnes >= 1.0:
 			var consumed_raw: float = 1.0
 			raw_regolith_tonnes -= consumed_raw
@@ -97,7 +99,7 @@ func process_mining_and_extraction(has_power: bool) -> void:
 		else:
 			show_screen_warning("Extractor idle: Need raw regolith!")
 	
-	if devices["processor"].is_on:
+	if devices["processor"].device_on:
 		if refined_regolith >= 0.5:
 			refined_regolith -= 0.5
 			var extracted_fuel: float = randf_range(10.0, 26.0)
@@ -152,7 +154,7 @@ func run_day_phase(day_in_month: int) -> void:
 	var total_consumption: float = 0.0
 	
 	for dev in devices.values():
-		if dev.is_on:
+		if dev.device_on:
 			total_gen += dev.generation
 			total_consumption += dev.consumption
 			
@@ -189,7 +191,7 @@ func run_night_phase(day_in_month: int) -> void:
 	
 	var total_consumption: float = 0.0
 	for dev in devices.values():
-		if dev.is_on:
+		if dev.device_on:
 			total_consumption += dev.consumption
 			
 	var remaining_load: float = total_consumption
