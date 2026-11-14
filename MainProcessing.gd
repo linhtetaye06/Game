@@ -223,6 +223,9 @@ func run_night_phase(day_in_month: int) -> void:
 
 
 func deposit_power(amount: float) -> void:
+	if amount > battery:
+		return
+	battery -= amount
 	large_battery += amount
 	if large_battery > max_large_battery:
 		large_battery = max_large_battery
