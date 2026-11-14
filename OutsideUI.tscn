@@ -3,46 +3,97 @@
 [ext_resource type="Texture2D" uid="uid://makpp4nsr5m6" path="res://Assests/Outside_field.png" id="1_7it1p"]
 [ext_resource type="Texture2D" uid="uid://ce2eip7uy6j5a" path="res://Assests/arrow.png" id="2_jwneo"]
 [ext_resource type="Script" uid="uid://r5tcvemfidh" path="res://UIarrow.gd" id="3_tycja"]
+[ext_resource type="Texture2D" uid="uid://bgdokj6sg0ix2" path="res://Assests/solarpaneloff.png" id="4_q235v"]
+[ext_resource type="Texture2D" uid="uid://do11x2rsufjgi" path="res://Assests/solarpanelon.png" id="5_ap1yg"]
+[ext_resource type="Texture2D" uid="uid://b2j3mongw7ccw" path="res://Assests/miners.png" id="6_ap1yg"]
 
 [node name="OutsideUi" type="Control" unique_id=1742708983]
 layout_mode = 3
 anchors_preset = 0
 
-[node name="GridContainer" type="GridContainer" parent="." unique_id=2116981308]
-layout_mode = 0
-offset_right = 233.0
-offset_bottom = 111.0
-
-[node name="solarpanel1" type="TextureButton" parent="GridContainer" unique_id=1163981864]
-layout_mode = 2
-
-[node name="TextureButton2" type="TextureButton" parent="GridContainer" unique_id=240303783]
-layout_mode = 2
-
-[node name="TextureButton3" type="TextureButton" parent="GridContainer" unique_id=2104069622]
-layout_mode = 2
-
-[node name="TextureButton4" type="TextureButton" parent="GridContainer" unique_id=327115101]
-layout_mode = 2
-
-[node name="TextureButton5" type="TextureButton" parent="GridContainer" unique_id=1704512063]
-layout_mode = 2
-
-[node name="TextureButton6" type="TextureButton" parent="GridContainer" unique_id=2049312004]
-layout_mode = 2
-
 [node name="TextureRect" type="TextureRect" parent="." unique_id=1568267786]
 layout_mode = 0
-offset_right = 1155.0
-offset_bottom = 651.0
+offset_right = 1276.0
+offset_bottom = 631.0
 texture = ExtResource("1_7it1p")
 
 [node name="Arrow" type="TextureButton" parent="." unique_id=2097131816]
 layout_mode = 0
-offset_left = 555.0
-offset_top = 554.0
-offset_right = 723.0
-offset_bottom = 698.0
+offset_left = 562.0
+offset_top = 529.0
+offset_right = 730.0
+offset_bottom = 673.0
 scale = Vector2(0.5, 0.5)
 texture_normal = ExtResource("2_jwneo")
 script = ExtResource("3_tycja")
+
+[node name="GridContainer" type="GridContainer" parent="." unique_id=2116981308]
+layout_mode = 0
+offset_left = 703.0
+offset_top = 375.0
+offset_right = 1461.0
+offset_bottom = 1051.0
+columns = 3
+
+[node name="solarpanel1" type="TextureButton" parent="GridContainer" unique_id=1969000232]
+custom_minimum_size = Vector2(150, 120)
+layout_mode = 2
+texture_normal = ExtResource("4_q235v")
+texture_pressed = ExtResource("5_ap1yg")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="solarpanel2" type="TextureButton" parent="GridContainer" unique_id=368924349]
+custom_minimum_size = Vector2(150, 120)
+layout_mode = 2
+texture_normal = ExtResource("4_q235v")
+texture_pressed = ExtResource("5_ap1yg")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="solarpanel3" type="TextureButton" parent="GridContainer" unique_id=1583845892]
+custom_minimum_size = Vector2(150, 120)
+layout_mode = 2
+texture_normal = ExtResource("4_q235v")
+texture_pressed = ExtResource("5_ap1yg")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="solarpanel4" type="TextureButton" parent="GridContainer" unique_id=799671783]
+custom_minimum_size = Vector2(150, 120)
+layout_mode = 2
+texture_normal = ExtResource("4_q235v")
+texture_pressed = ExtResource("5_ap1yg")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="solarpanel5" type="TextureButton" parent="GridContainer" unique_id=1536015277]
+custom_minimum_size = Vector2(150, 120)
+layout_mode = 2
+texture_normal = ExtResource("4_q235v")
+texture_pressed = ExtResource("5_ap1yg")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="solarpanel6" type="TextureButton" parent="GridContainer" unique_id=406798473]
+custom_minimum_size = Vector2(150, 120)
+layout_mode = 2
+texture_normal = ExtResource("4_q235v")
+texture_pressed = ExtResource("5_ap1yg")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="Miners" type="Sprite2D" parent="." unique_id=48871611]
+position = Vector2(83.5, 353.25)
+scale = Vector2(0.4139073, 0.41015628)
+texture = ExtResource("6_ap1yg")
+
+[node name="Miners2" type="Sprite2D" parent="." unique_id=539781159]
+position = Vector2(324, 395)
+scale = Vector2(0.4139073, 0.41015628)
+texture = ExtResource("6_ap1yg")
+
+[node name="Miners3" type="Sprite2D" parent="." unique_id=335650365]
+position = Vector2(193, 498)
+scale = Vector2(0.4139073, 0.41015628)
+texture = ExtResource("6_ap1yg")
