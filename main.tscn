@@ -111,10 +111,11 @@ offset_right = 759.0
 offset_bottom = 28.0
 text = "Day x of Month y (Day Time)"
 
-[node name="Battery" type="Area2D" parent="." unique_id=2073264843]
+[node name="Battery" type="Area2D" parent="." unique_id=2073264843 node_paths=PackedStringArray("game_backend")]
 position = Vector2(1143, 566)
 scale = Vector2(1.1040846, 1.2112402)
 script = ExtResource("5_7mycd")
+game_backend = NodePath("../GameProcessing")
 
 [node name="Battery2" type="Sprite2D" parent="Battery" unique_id=947224133]
 position = Vector2(0.9057617, -120.5376)

@@ -220,3 +220,10 @@ func run_night_phase(day_in_month: int) -> void:
 		has_power = (battery_installed and battery >= 0) or (large_battery_installed and large_battery >= 0)
 
 	process_mining_and_extraction(has_power)
+
+
+func deposit_power(amount: float) -> void:
+	large_battery += amount
+	if large_battery > max_large_battery:
+		large_battery = max_large_battery
+	stats_updated.emit()

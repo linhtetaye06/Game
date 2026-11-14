@@ -6,6 +6,8 @@ extends Control
 @onready var missed_quota_days: Label = $StatTracker/missed_quota_days
 @onready var regolith: Label = $StatTracker/regolith
 @onready var Day_night_month: Label = $StatTracker/Day_night_month
+@onready var power_label: Label = $StatTracker/power
+@onready var battery_label: Label = $StatTracker/battery_power
 
 func _ready() -> void: 
 	if game_backend : 
@@ -19,4 +21,10 @@ func update_ui() -> void:
 	var time_of_day = "Day Time" if not game_timer.is_night else "Night Time"
 	Day_night_month.text = "Month %d (%s)" % [game_timer.month, time_of_day]
 	print("UPDATE_UI WAS CALLED! Current month is: ", game_timer.month)
+	var current_power = game_backend.battery
+	var max_power = game_backend.max_battery
+	power_label.text = "Power : %.1f/%.1f kWh" % [current_power, max_power]
+	var battery_power = game_backend.large_battery
+	var battery_max = game_backend.max_large_battery
+	battery_label.text = "Battery Storage : %.1f/%.1f kWh" % [battery_power, battery_max]
 	
