@@ -7,3 +7,7 @@ func _on_input_event(viewport: Node, event: InputEvent, shape_idx:int) -> void :
 		if next_ui_scene:
 			get_tree().change_scene_to_file(next_ui_scene)
 			
+
+
+func _on_deposit_confirmed() -> void:
+	pass # Replace with function body.

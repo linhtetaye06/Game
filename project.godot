@@ -15,8 +15,15 @@ run/main_scene="uid://cqow47bch5ocs"
 config/features=PackedStringArray("4.7", "Mobile")
 config/icon="res://icon.svg"
 
+[autoload]
+
+GlobalData="*uid://bwlietfi5sv7j"
+GameProcessing="*uid://q0shobxqlr8o"
+
 [display]
 
+window/size/viewport_width=1280
+window/size/viewport_height=640
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
