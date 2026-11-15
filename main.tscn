@@ -193,11 +193,10 @@ scale = Vector2(1.1040846, 1.2112402)
 script = ExtResource("5_7mycd")
 
 [node name="Battery2" type="Sprite2D" parent="Battery" unique_id=947224133]
-position = Vector2(1.8114892, -105.676796)
+position = Vector2(0.9057617, -120.5376)
 texture = ExtResource("5_lquwl")
 
 [node name="Battery" type="Sprite2D" parent="Battery" unique_id=1223124539]
-position = Vector2(1.8114561, 15.686401)
 texture = ExtResource("5_lquwl")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Battery" unique_id=494324751]
