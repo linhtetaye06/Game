@@ -38,7 +38,7 @@ var storage_loss_coefficient: float = 0.10
 
 var refined_regolith: float = 0.0
 
-var quota:float = 1000.0
+var quota:float = 500.0
 
 var total_missed_quotas:int = 0
 
@@ -81,15 +81,7 @@ func check_survival_conditions() -> bool:
 	if battery < 50.0:
 		display_warning.emit("💀 GAME OVER: You don't have enough battery to use life support!")
 		return false
-
-	return true
-	if not devices["food"].device_on:
-		food_off_days += 1
-		display_warning.emit(" Food Production OFF! Days without food: %d/7" % food_off_days)
-	
-	if food_off_days > 7:
-		display_warning.emit(" GAME OVER: The crew starved!")
-		return false
+		
 
 	return true
 
@@ -159,7 +151,7 @@ func check_monthly_quota() -> bool:
 		refined_regolith -= quota
 		display_warning.emit("Monthly quota fulfilled! Deducted %.1f kg of fuel." % quota)
 		month += 1
-		quota = round(quota * 1.30)
+		quota += 500
 		food_off_days = 0
 		return true
 	else:

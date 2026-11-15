@@ -7,10 +7,16 @@
 [ext_resource type="Texture2D" uid="uid://cfwej46xdoiob" path="res://Assests/button.png" id="3_1bvp3"]
 [ext_resource type="Texture2D" uid="uid://d3w6yuuo0n6ba" path="res://Assests/Button-pressed.png" id="4_lquwl"]
 [ext_resource type="Script" uid="uid://iijk1atc833d" path="res://batteryinput.gd" id="5_7mycd"]
+[ext_resource type="Script" uid="uid://ygjmvir8wimw" path="res://ChangeNight.gd" id="5_dg77c"]
 [ext_resource type="Texture2D" uid="uid://bdgtkk3x7ghb2" path="res://Assests/battery.png" id="5_lquwl"]
+[ext_resource type="Texture2D" uid="uid://cyslymsf0123k" path="res://Assests/night.png" id="5_ycdy4"]
 [ext_resource type="Script" uid="uid://cd7tlpuikd52o" path="res://extractbutton.gd" id="6_kek77"]
 [ext_resource type="Script" uid="uid://d1vgc5na16jlm" path="res://processbutton.gd" id="7_4c57u"]
+[ext_resource type="Texture2D" uid="uid://kpo230led43j" path="res://Assests/Asteroidday.png" id="7_vivmo"]
+[ext_resource type="Texture2D" uid="uid://drpo2m25wpqrt" path="res://Assests/Asteroidnight.png" id="8_2cqfq"]
 [ext_resource type="Script" uid="uid://byrt6gojcgw2p" path="res://gametimer.gd" id="8_kek77"]
+[ext_resource type="Texture2D" uid="uid://bjnclox4yxbej" path="res://Assests/Solarflare.png" id="16_yaehf"]
+[ext_resource type="Texture2D" uid="uid://knwqqx0wfnp" path="res://Assests/Duststorm.png" id="17_074og"]
 
 [sub_resource type="Theme" id="Theme_4c57u"]
 Label/font_sizes/font_size = 16
@@ -30,7 +36,7 @@ theme = SubResource("Theme_4c57u")
 script = ExtResource("1_272bh")
 game_timer = NodePath("GameTimer")
 
-[node name="TextureRect" type="TextureRect" parent="." unique_id=427556133]
+[node name="MainBG" type="TextureRect" parent="." unique_id=427556133]
 layout_mode = 0
 offset_left = 4.0
 offset_right = 1284.0
@@ -45,6 +51,56 @@ next_ui_scene = "uid://d6psqr1sg2cq"
 visible = false
 position = Vector2(637, 184)
 shape = SubResource("RectangleShape2D_ifeun")
+
+[node name="WindowNight" type="TextureRect" parent="." unique_id=1914476529]
+visible = false
+layout_mode = 0
+offset_left = 408.0
+offset_top = 30.0
+offset_right = 868.0
+offset_bottom = 330.0
+texture = ExtResource("5_ycdy4")
+script = ExtResource("5_dg77c")
+
+[node name="WindowAsteroidDay" type="TextureRect" parent="." unique_id=1998248538]
+visible = false
+layout_mode = 0
+offset_left = 408.0
+offset_top = 30.0
+offset_right = 868.0
+offset_bottom = 330.0
+texture = ExtResource("7_vivmo")
+script = ExtResource("5_dg77c")
+
+[node name="WindowAsteroidNight" type="TextureRect" parent="." unique_id=449372055]
+visible = false
+layout_mode = 0
+offset_left = 408.0
+offset_top = 30.0
+offset_right = 868.0
+offset_bottom = 330.0
+texture = ExtResource("8_2cqfq")
+script = ExtResource("5_dg77c")
+
+[node name="WindowSolarFlare" type="TextureRect" parent="." unique_id=1950658587]
+visible = false
+layout_mode = 0
+offset_left = 408.0
+offset_top = 30.0
+offset_right = 868.0
+offset_bottom = 330.0
+texture = ExtResource("16_yaehf")
+script = ExtResource("5_dg77c")
+
+[node name="WindowDustStorm" type="TextureRect" parent="." unique_id=539571316]
+visible = false
+layout_mode = 0
+offset_left = 408.0
+offset_top = 30.0
+offset_right = 868.0
+offset_bottom = 330.0
+texture = ExtResource("17_074og")
+script = ExtResource("5_dg77c")
 
 [node name="ExtractButton" type="TextureButton" parent="." unique_id=368583381]
 layout_mode = 0

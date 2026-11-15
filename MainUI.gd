@@ -47,3 +47,38 @@ func show_screen_warning(text: String) -> void:
 	if is_instance_valid(warning_label):
 		warning_label.text = ""
 		warning_label.visible = false
+
+
+
+@onready var day_node: TextureRect = $WindowDay
+@onready var night_node: TextureRect = $WindowNight
+@onready var asteroid_day_node: TextureRect = $WindowAsteroidDay
+@onready var asteroid_night_node: TextureRect = $WindowAsteroidNight
+@onready var solar_flare_node: TextureRect = $WindowSolarFlare     
+@onready var dust_storm_node: TextureRect = $WindowDustStorm       
+
+func _process(delta: float) -> void:
+	var current_month: int = GameProcessing.current_month
+	var is_night_time: bool = GameProcessing.is_night
+	
+	day_node.visible = false
+	night_node.visible = false
+	asteroid_day_node.visible = false
+	asteroid_night_node.visible = false
+	solar_flare_node.visible = false
+	dust_storm_node.visible = false
+	
+	if current_month == 10:
+		solar_flare_node.visible = true
+	elif current_month == 11:
+		dust_storm_node.visible = true
+	elif current_month == 12:
+		if is_night_time:
+			asteroid_night_node.visible = true
+		else:
+			asteroid_day_node.visible = true
+	else:
+		if is_night_time:
+			night_node.visible = true
+		else:
+			day_node.visible = true
