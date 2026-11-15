@@ -42,6 +42,12 @@ var quota:float = 1000.0
 
 var total_missed_quotas:int = 0
 
+var is_dust_storm_active: bool = false
+
+var is_solar_flare_active: bool = false
+
+var is_asteroid_disaster_active: bool = false
+
 func _init() -> void:
 	if GlobalData.saved_device_states.is_empty(): 
 		devices = {
@@ -98,7 +104,7 @@ func process_mining_and_extraction(has_power: bool) -> void:
 		var miner_key = "miner_%d" % i
 		if devices.has(miner_key) and devices[miner_key].device_on:
 			active_miners+=1
-			total_mined += randf_range(2000.0, 5000.0)
+			total_mined += randf_range(300.0, 400.0)
 
 	if total_mined> 0.0:
 		raw_regolith_kg += total_mined
@@ -283,15 +289,54 @@ func set_processor_state(is_on: bool) -> void:
 		print("Processor state updated to: ", is_on)
 
 
+var current_month: int = 1
+
+
 func update_power() -> void:
+	if current_month == 7:
+		if not is_solar_flare_active:
+			is_solar_flare_active = true
+			display_warning.emit("☀️ ALERT: Solar flare event in Month 10! Radiation shielding power draw increased by 60%.")
+	else:
+		is_solar_flare_active = false
+
+	if current_month == 10:
+		if not is_dust_storm_active:
+			is_dust_storm_active = true
+			display_warning.emit("⚠️ ALERT: Massive dust storm in Month 11! Solar generation severely restricted.")
+	else:
+		is_dust_storm_active = false
+
+	if current_month == 12:
+		if not is_asteroid_disaster_active:
+			is_asteroid_disaster_active = true
+			display_warning.emit("☄️ ALERT: Asteroid impact in Month 12! Miner 1, Solar Panel 1, and Solar Panel 2 disabled.")
+	else:
+		is_asteroid_disaster_active = false
+
 	var total_gen: float = 0.0
 	var total_consumption: float = 0.0
 	
-	for dev in devices.values():
-		if dev.device_on:
+	for key in devices.keys():
+		var dev = devices[key]
+		
+		var disabled_by_asteroid = is_asteroid_disaster_active and (key == "miner_1" or key == "solar_1" or key == "solar_2")
+		
+		if dev.device_on and not disabled_by_asteroid:
 			if not is_night:
-				total_gen += dev.generation
-			total_consumption += dev.consumption
+				var gen_amount = dev.generation
+				
+				if key.begins_with("solar") and is_dust_storm_active:
+					gen_amount *= 0.25
+					
+				total_gen += gen_amount
+				
+			var consumption_amount = dev.consumption
+			
+			if key == "shielding" and is_solar_flare_active:
+				consumption_amount *= 1.60
+				
+			total_consumption += consumption_amount
 			
 	var net_power: float = total_gen - total_consumption
 	var power_ok: bool = true
@@ -316,9 +361,12 @@ func update_power() -> void:
 				power_ok = false
 	else:
 		if net_power < 0:
-			power_ok = false
+			has_power = false
 
 	has_power = power_ok
 
 func check_power_availability() -> bool:
 	return has_power
+
+
+	

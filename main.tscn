@@ -193,7 +193,6 @@ offset_bottom = 108.0
 
 [node name="Warning" type="Label" parent="WarningControl/WarningContainer" unique_id=1053108682]
 layout_mode = 2
-text = "Youre Dead"
 
 [connection signal="input_event" from="Area2D" to="Area2D" method="_on_input_event"]
 [connection signal="pressed" from="Battery/BatteryUI/Batterypopup/VBoxContainer/Button" to="Area2D" method="_on_deposit_confirmed"]
