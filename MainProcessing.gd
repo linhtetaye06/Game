@@ -23,7 +23,7 @@ var battery_installed: bool = true
 
 var battery: float = 200.0
 
-var max_battery: float = 100000.0
+var max_battery: float = 8000.0
 
 var food_off_days: int = 0
 
@@ -33,7 +33,7 @@ var large_battery_installed: bool = false
 
 var large_battery: float = 0.0
 
-var max_large_battery: float = 5000000.0
+var max_large_battery: float = 4000.0
 
 var storage_loss_coefficient: float = 0.10
 
@@ -46,21 +46,21 @@ var total_missed_quotas:int = 0
 func _init() -> void:
 	if GlobalData.saved_device_states.is_empty(): 
 		devices = {
-			"solar_1": Device.new("Solar Panel 1", 0.0, 9150.0, true),
-			"solar_2": Device.new("Solar Panel 2", 0.0, 9150.0, true),
-			"solar_3": Device.new("Solar Panel 3", 0.0, 9150.0, true),
-			"solar_4": Device.new("Solar Panel 4", 0.0, 9150.0, true),
-			"solar_5": Device.new("Solar Panel 5", 0.0, 9150.0, true),
-			"solar_6": Device.new("Solar Panel 6", 0.0, 9150.0, true),
+			"solar_1": Device.new("Solar Panel 1", 0.0, 1.25, true),
+			"solar_2": Device.new("Solar Panel 2", 0.0, 1.25, true),
+			"solar_3": Device.new("Solar Panel 3", 0.0, 1.25, true),
+			"solar_4": Device.new("Solar Panel 4", 0.0, 1.25, true),
+			"solar_5": Device.new("Solar Panel 5", 0.0,1.25, true),
+			"solar_6": Device.new("Solar Panel 6", 0.0, 1.25, true),
 		
-		"life_support": Device.new("Life Support", 3294.0, 0.0, true),
+		"life_support": Device.new("Life Support", 0.45, 0.0, true),
 		"food": Device.new("Food Production", 0.0, 0.0, false),
-		"miner_1": Device.new("Regolith Miner", 4758.0, 0.0, false),
-		"miner_2": Device.new("Regolith Miner", 4758.0, 0.0, false),
-		"miner_3": Device.new("Regolith Miner", 4758.0, 0.0, false),
-		"extractor": Device.new("Extractor", 7320.0, 0.0, false),
-		"shielding": Device.new("Shielding",1830.0,0.0,true),
-		"processor" : Device.new("Processor",9150,0.0,false),
+		"miner_1": Device.new("Regolith Miner", 0.65, 0.0, false),
+		"miner_2": Device.new("Regolith Miner", 0.65, 0.0, false),
+		"miner_3": Device.new("Regolith Miner", 0.65, 0.0, false),
+		"extractor": Device.new("Extractor", 1.0, 0.0, false),
+		"shielding": Device.new("Shielding",0.25,0.0,true),
+		"processor" : Device.new("Processor",1.25,0.0,false),
 	}
 	else : 
 		devices = GlobalData.saved_device_states
@@ -77,15 +77,15 @@ func apply_wear_and_tear() -> void:
 			
 func check_survival_conditions() -> bool:
 	if not devices["life_support"].device_on:
-		show_screen_warning("💀 GAME OVER: Life Support offline! Crew asphyxiated.")
+		show_screen_warning(" GAME OVER: Life Support offline! Crew asphyxiated.")
 		return false
 
 	if not devices["food"].device_on:
 		food_off_days += 1
-		show_screen_warning("⚠️ Food Production OFF! Days without food: %d/7" % food_off_days)
+		show_screen_warning(" Food Production OFF! Days without food: %d/7" % food_off_days)
 	
 	if food_off_days > 7:
-		show_screen_warning("💀 GAME OVER: The crew starved!")
+		show_screen_warning(" GAME OVER: The crew starved!")
 		return false
 
 	return true
