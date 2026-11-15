@@ -3,6 +3,8 @@ extends Node
 
 signal stats_updated 
 
+var has_power:bool = false
+
 var total_mined:float = 0.0
 
 var month:int = 1
@@ -21,7 +23,7 @@ var battery_installed: bool = true
 
 var battery: float = 200.0
 
-var max_battery: float = 400.0
+var max_battery: float = 100000.0
 
 var food_off_days: int = 0
 
@@ -31,34 +33,34 @@ var large_battery_installed: bool = false
 
 var large_battery: float = 0.0
 
-var max_large_battery: float = 1000.0
+var max_large_battery: float = 5000000.0
 
 var storage_loss_coefficient: float = 0.10
 
 var refined_regolith: float = 0.0
 
-var quota:float = 100.0
+var quota:float = 1000.0
 
 var total_missed_quotas:int = 0
 
 func _init() -> void:
 	if GlobalData.saved_device_states.is_empty(): 
 		devices = {
-			"solar_1": Device.new("Solar Panel 1", 0.0, 35.0, true),
-			"solar_2": Device.new("Solar Panel 2", 0.0, 35.0, true),
-			"solar_3": Device.new("Solar Panel 3", 0.0, 35.0, true),
-			"solar_4": Device.new("Solar Panel 4", 0.0, 35.0, true),
-			"solar_5": Device.new("Solar Panel 5", 0.0, 35.0, true),
-			"solar_6": Device.new("Solar Panel 6", 0.0, 35.0, true),
+			"solar_1": Device.new("Solar Panel 1", 0.0, 9150.0, true),
+			"solar_2": Device.new("Solar Panel 2", 0.0, 9150.0, true),
+			"solar_3": Device.new("Solar Panel 3", 0.0, 9150.0, true),
+			"solar_4": Device.new("Solar Panel 4", 0.0, 9150.0, true),
+			"solar_5": Device.new("Solar Panel 5", 0.0, 9150.0, true),
+			"solar_6": Device.new("Solar Panel 6", 0.0, 9150.0, true),
 		
-		"life_support": Device.new("Life Support", 9.0, 0.0, true),
-		"food": Device.new("Food Production", 90.0, 0.0, false),
-		"miner_1": Device.new("Regolith Miner", 20.0, 0.0, false),
-		"miner_2": Device.new("Regolith Miner", 20.0, 0.0, false),
-		"miner_3": Device.new("Regolith Miner", 20.0, 0.0, false),
-		"extractor": Device.new("Extractor", 100.0, 0.0, false),
-		"shielding": Device.new("Shielding",5.0,0.0,true),
-		"processor" : Device.new("Processor",250,0.0,false),
+		"life_support": Device.new("Life Support", 3294.0, 0.0, true),
+		"food": Device.new("Food Production", 0.0, 0.0, false),
+		"miner_1": Device.new("Regolith Miner", 4758.0, 0.0, false),
+		"miner_2": Device.new("Regolith Miner", 4758.0, 0.0, false),
+		"miner_3": Device.new("Regolith Miner", 4758.0, 0.0, false),
+		"extractor": Device.new("Extractor", 7320.0, 0.0, false),
+		"shielding": Device.new("Shielding",1830.0,0.0,true),
+		"processor" : Device.new("Processor",9150,0.0,false),
 	}
 	else : 
 		devices = GlobalData.saved_device_states
@@ -150,8 +152,8 @@ func burn_fuel(kg_to_burn: float) -> void:
 	show_screen_warning("Burned %.1f kg fuel -> +%.1f kWh!" % [kg_to_burn, energy_gained])
 
 func check_monthly_quota() -> bool:
-	if fuel_kg >= quota:
-		fuel_kg -= quota
+	if refined_regolith >= quota:
+		refined_regolith -= quota
 		show_screen_warning("Monthly quota fulfilled! Deducted %.1f kg of fuel." % quota)
 		month += 1
 		quota = round(quota * 1.30)
@@ -283,3 +285,43 @@ func set_processor_state(is_on: bool) -> void:
 		stats_updated.emit()
 		print("Processor state updated to: ", is_on)
 		
+
+func update_power() -> void:
+	var total_gen: float = 0.0
+	var total_consumption: float = 0.0
+	
+	for dev in devices.values():
+		if dev.device_on:
+			if not is_night:
+				total_gen += dev.generation
+			total_consumption += dev.consumption
+			
+	var net_power: float = total_gen - total_consumption
+	var power_ok: bool = true
+	
+	if battery_installed:
+		battery += net_power
+		if battery > max_battery:
+			var excess: float = battery - max_battery
+			show_screen_warning("Battery overfilled! Lost %.1f kWh." % excess)
+			battery = max_battery
+		elif battery < 0:
+			var deficit: float = abs(battery)
+			battery = 0.0
+			if large_battery_installed and large_battery > 0:
+				var drawn_from_large: float = deficit / (1.0 - storage_loss_coefficient)
+				if large_battery >= drawn_from_large:
+					large_battery -= drawn_from_large
+				else:
+					large_battery = 0.0
+					power_ok = false
+			else:
+				power_ok = false
+	else:
+		if net_power < 0:
+			power_ok = false
+
+	has_power = power_ok
+
+func check_power_availability() -> bool:
+	return has_power
