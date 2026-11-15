@@ -3,6 +3,8 @@ extends Node
 
 signal stats_updated 
 
+var total_mined:float = 0.0
+
 var month:int = 1
 
 var warning_label: Label = null
@@ -36,21 +38,26 @@ var quota:float = 100.0
 var total_missed_quotas:int = 0
 
 func _init() -> void:
-	devices = {
-		"solar_1": Device.new("Solar Panel 1", 0.0, 35.0, true),
-		"solar_2": Device.new("Solar Panel 2", 0.0, 35.0, true),
-		"solar_3": Device.new("Solar Panel 3", 0.0, 35.0, true),
-		"solar_4": Device.new("Solar Panel 4", 0.0, 35.0, true),
-		"solar_5": Device.new("Solar Panel 5", 0.0, 35.0, true),
-		"solar_6": Device.new("Solar Panel 6", 0.0, 35.0, true),
+	if GlobalData.saved_device_states.is_empty(): 
+		devices = {
+			"solar_1": Device.new("Solar Panel 1", 0.0, 35.0, true),
+			"solar_2": Device.new("Solar Panel 2", 0.0, 35.0, true),
+			"solar_3": Device.new("Solar Panel 3", 0.0, 35.0, true),
+			"solar_4": Device.new("Solar Panel 4", 0.0, 35.0, true),
+			"solar_5": Device.new("Solar Panel 5", 0.0, 35.0, true),
+			"solar_6": Device.new("Solar Panel 6", 0.0, 35.0, true),
 		
 		"life_support": Device.new("Life Support", 9.0, 0.0, true),
 		"food": Device.new("Food Production", 90.0, 0.0, false),
-		"miner": Device.new("Regolith Miner", 20.0, 0.0, false),
+		"miner_1": Device.new("Regolith Miner", 20.0, 0.0, false),
+		"miner_2": Device.new("Regolith Miner", 20.0, 0.0, false),
+		"miner_3": Device.new("Regolith Miner", 20.0, 0.0, false),
 		"extractor": Device.new("Extractor", 100.0, 0.0, false),
 		"shielding": Device.new("Shielding",5.0,0.0,true),
 		"processor" : Device.new("Processor",250,0.0,false),
 	}
+	else : 
+		devices = GlobalData.saved_device_states
 
 
 func show_screen_warning(text: String) -> void:
@@ -81,17 +88,26 @@ func process_mining_and_extraction(has_power: bool) -> void:
 	if not has_power:
 		return
 
-	if devices["miner"].device_on:
-		var mined_tonnes: float = randf_range(2.0, 5.0)
-		raw_regolith_tonnes += mined_tonnes
-		show_screen_warning(" Miner gained %.1f tonnes of regolith." % mined_tonnes)
+	var active_miners: int = 0
+
+	for i in range(1, 4):
+		var miner_key = "miner_%d" % i
+		if devices.has(miner_key) and devices[miner_key].device_on:
+			active_miners += 1
+
+	if active_miners > 0:
+		var total_mined: float = 0.0
+		for i in range(active_miners):
+			total_mined += randf_range(2.0, 5.0)
+	
+	raw_regolith_tonnes += total_mined
+	show_screen_warning(" %d active miner(s) gained %.1f tonnes of regolith." % [active_miners, total_mined])
 		
 	if devices["extractor"].device_on:
 		if raw_regolith_tonnes >= 1.0:
 			var consumed_raw: float = 1.0
 			raw_regolith_tonnes -= consumed_raw
 			
-			# Reduces the mass by 20% (leaving 80% as pure/refined material)
 			var refined_tonnes: float = consumed_raw * 0.8 
 			refined_regolith += refined_tonnes
 			
@@ -230,3 +246,18 @@ func deposit_power(amount: float) -> void:
 	if large_battery > max_large_battery:
 		large_battery = max_large_battery
 	stats_updated.emit()
+
+
+func set_solar_panel_state(index: int, is_on: bool) -> void:
+	var device_key = "solar_%d" % (index + 1)
+	if devices.has(device_key):
+		devices[device_key].device_on = is_on
+		GlobalData.saved_device_states = devices
+		stats_updated.emit()
+		
+func set_miner_state(index: int, is_on: bool) -> void:
+	var device_key = "miner_%d" % (index + 1)
+	if devices.has(device_key):
+		devices[device_key].device_on = is_on
+		GlobalData.saved_device_states = devices
+		stats_updated.emit()
