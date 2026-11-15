@@ -288,21 +288,30 @@ func update_power() -> void:
 	if current_month == 7:
 		if not is_solar_flare_active:
 			is_solar_flare_active = true
-			display_warning.emit("☀️ ALERT: Solar flare event in Month 10! Radiation shielding power draw increased by 60%.")
+			display_warning.emit("☀️ ALERT: Solar flare event in Month 10! Radiation shielding power draw increased by 60%.
+			Real World Occurence: The August 172 Solar Storms
+			NASA Resource / Source: NASA Space Radiation Analysis Group (SRAG) 
+			& LPI Apollo Archive — NASA / USRA Interplanetary Conditions during the Apollo Missions Study.")
 	else:
 		is_solar_flare_active = false
 
 	if current_month == 10:
 		if not is_dust_storm_active:
 			is_dust_storm_active = true
-			display_warning.emit("⚠️ ALERT: Massive dust storm in Month 11! Solar generation severely restricted.")
+			display_warning.emit("⚠️ ALERT: Massive dust storm in Month 11! Solar generation severely restricted.
+			Real World Occurence: The Apollo 17 Thermal And Joint Jamming
+			NASA Resource / Source: NASA Glenn Research Center Technical Memorandum — NASA TM-2005-213610: 
+				The Effects of Lunar Dust on EVA Systems During the Apollo Missions.")
 	else:
 		is_dust_storm_active = false
 
 	if current_month == 12:
 		if not is_asteroid_disaster_active:
 			is_asteroid_disaster_active = true
-			display_warning.emit("☄️ ALERT: Asteroid impact in Month 12! Miner 1, Solar Panel 1, and Solar Panel 2 disabled.")
+			display_warning.emit("☄️ ALERT: Asteroid impact in Month 12! Miner 1, Solar Panel 1, and Solar Panel 2 disabled.
+			Real World Occurence: The September 11, 2013 Impact Flash
+			NASA Resource / Source: NASA Meteoroid Environment Office (MEO) & Marshall Space Flight Center 
+			— NASA MEO Lunar Impact Monitoring Portal.")
 	else:
 		is_asteroid_disaster_active = false
 

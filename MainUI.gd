@@ -50,7 +50,7 @@ func show_screen_warning(text: String) -> void:
 
 
 
-@onready var day_node: TextureRect = $WindowDay
+
 @onready var night_node: TextureRect = $WindowNight
 @onready var asteroid_day_node: TextureRect = $WindowAsteroidDay
 @onready var asteroid_night_node: TextureRect = $WindowAsteroidNight
@@ -61,7 +61,6 @@ func _process(delta: float) -> void:
 	var current_month: int = GameProcessing.current_month
 	var is_night_time: bool = GameProcessing.is_night
 	
-	day_node.visible = false
 	night_node.visible = false
 	asteroid_day_node.visible = false
 	asteroid_night_node.visible = false
@@ -80,5 +79,3 @@ func _process(delta: float) -> void:
 	else:
 		if is_night_time:
 			night_node.visible = true
-		else:
-			day_node.visible = true
