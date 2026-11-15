@@ -8,6 +8,7 @@ extends Control
 @onready var power_label: Label = $StatTracker/power
 @onready var battery_label: Label = $StatTracker/battery_power
 @onready var refined_regolith: Label = $StatTracker/refined_regolith
+@onready var warning_label = $Warning/WarningContainer
 
 func _ready() -> void: 
 	if GameProcessing : 
@@ -30,3 +31,18 @@ func update_ui() -> void:
 	var refined = GameProcessing.refined_regolith
 	refined_regolith.text = "Refined Regolith amount : %.1f kg" % refined
 	
+
+var warning_timer: SceneTreeTimer
+
+func show_screen_warning(text: String) -> void:
+	if not warning_label:
+		return
+		
+	warning_label.text = text
+	warning_label.visible = true
+	
+	await get_tree().create_timer(5.0).timeout
+	
+	if is_instance_valid(warning_label):
+		warning_label.text = ""
+		warning_label.visible = false

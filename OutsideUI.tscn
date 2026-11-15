@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://b2j3mongw7ccw" path="res://Assests/miners.png" id="6_ap1yg"]
 [ext_resource type="Script" uid="uid://w8jhb2oyxuai" path="res://miners.gd" id="8_ahcr5"]
 [ext_resource type="Texture2D" uid="uid://lsofoelef85k" path="res://Assests/miner_shadow.png" id="9_ahcr5"]
+[ext_resource type="Texture2D" uid="uid://bs36d4d4l6jrj" path="res://Assests/miner_on.png" id="9_yev56"]
 
 [node name="OutsideUi" type="Control" unique_id=1742708983]
 layout_mode = 3
@@ -86,7 +87,7 @@ stretch_mode = 4
 [node name="MinerContainer" type="Node2D" parent="." unique_id=1427738316]
 script = ExtResource("8_ahcr5")
 texture_on = ExtResource("9_ahcr5")
-texture_off = ExtResource("9_ahcr5")
+texture_off = ExtResource("9_yev56")
 
 [node name="Miner1" type="TextureButton" parent="MinerContainer" unique_id=349907933]
 offset_left = 42.00001

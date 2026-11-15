@@ -3,6 +3,8 @@ extends Node
 
 signal stats_updated 
 
+@onready var warning_label = $Warning/WarningContainer
+
 var has_power:bool = false
 
 var total_mined:float = 0.0
@@ -12,8 +14,6 @@ var month:int = 1
 var total_month:int = 12
 
 var is_night:bool = false
-
-var warning_label: Label = null
 
 var raw_regolith_kg: float = 5000.0
 
@@ -67,8 +67,17 @@ func _init() -> void:
 
 
 func show_screen_warning(text: String) -> void:
-	if warning_label:
-		warning_label.text = text
+	if not warning_label:
+		return
+		
+	warning_label.text = text
+	warning_label.visible = true
+	
+	await get_tree().create_timer(5.0).timeout
+	
+	if is_instance_valid(warning_label):
+		warning_label.text = ""
+		warning_label.visible = false
 		
 func apply_wear_and_tear() -> void:
 	for dev in devices.values():
