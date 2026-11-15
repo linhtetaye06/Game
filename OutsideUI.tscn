@@ -1,254 +1,113 @@
 [gd_scene format=3 uid="uid://d6psqr1sg2cq"]
 
-[ext_resource type="FontFile" uid="uid://cnikvbungmvk2" path="res://Assests/CourierPrime-Regular.ttf" id="1_4xoln"]
-[ext_resource type="Script" uid="uid://bu3se03guwlp" path="res://MainUI.gd" id="2_2well"]
-[ext_resource type="Texture2D" uid="uid://ce1l1dqysurl3" path="res://Assests/UI sprite.png" id="3_eft0s"]
-[ext_resource type="Script" uid="uid://bhaxci2doslo7" path="res://Scripts/SwitchUI.gd" id="4_c857r"]
-[ext_resource type="Texture2D" uid="uid://cyslymsf0123k" path="res://Assests/night.png" id="5_dojra"]
-[ext_resource type="Script" uid="uid://ygjmvir8wimw" path="res://ChangeNight.gd" id="6_yeifc"]
-[ext_resource type="Texture2D" uid="uid://kpo230led43j" path="res://Assests/Asteroidday.png" id="7_bxmok"]
-[ext_resource type="Texture2D" uid="uid://drpo2m25wpqrt" path="res://Assests/Asteroidnight.png" id="8_n5t0x"]
-[ext_resource type="Texture2D" uid="uid://bjnclox4yxbej" path="res://Assests/Solarflare.png" id="9_7reeq"]
-[ext_resource type="Texture2D" uid="uid://knwqqx0wfnp" path="res://Assests/Duststorm.png" id="10_uhynh"]
-[ext_resource type="Texture2D" uid="uid://cfwej46xdoiob" path="res://Assests/button.png" id="11_5d2g4"]
-[ext_resource type="Texture2D" uid="uid://d3w6yuuo0n6ba" path="res://Assests/Button-pressed.png" id="12_lo0if"]
-[ext_resource type="Script" uid="uid://cd7tlpuikd52o" path="res://extractbutton.gd" id="13_nhb6i"]
-[ext_resource type="Script" uid="uid://d1vgc5na16jlm" path="res://processbutton.gd" id="14_vvuf8"]
-[ext_resource type="Script" uid="uid://iijk1atc833d" path="res://batteryinput.gd" id="15_d0hux"]
-[ext_resource type="Texture2D" uid="uid://bdgtkk3x7ghb2" path="res://Assests/battery.png" id="16_slmpe"]
-[ext_resource type="Script" uid="uid://byrt6gojcgw2p" path="res://gametimer.gd" id="17_l853v"]
+[ext_resource type="Texture2D" uid="uid://makpp4nsr5m6" path="res://Assests/Outside_field.png" id="1_7it1p"]
+[ext_resource type="Texture2D" uid="uid://ce2eip7uy6j5a" path="res://Assests/arrow.png" id="2_jwneo"]
+[ext_resource type="Script" uid="uid://r5tcvemfidh" path="res://UIarrow.gd" id="3_tycja"]
+[ext_resource type="Texture2D" uid="uid://bgdokj6sg0ix2" path="res://Assests/solarpaneloff.png" id="4_q235v"]
+[ext_resource type="Script" uid="uid://bmdkpbo4g42ic" path="res://solarpanels.gd" id="4_u6c3f"]
+[ext_resource type="Texture2D" uid="uid://do11x2rsufjgi" path="res://Assests/solarpanelon.png" id="5_ap1yg"]
+[ext_resource type="Texture2D" uid="uid://b2j3mongw7ccw" path="res://Assests/miners.png" id="6_ap1yg"]
+[ext_resource type="Script" uid="uid://w8jhb2oyxuai" path="res://miners.gd" id="8_ahcr5"]
+[ext_resource type="Texture2D" uid="uid://bs36d4d4l6jrj" path="res://Assests/miner_on.png" id="9_yev56"]
 
-[sub_resource type="Theme" id="Theme_4c57u"]
-Label/font_sizes/font_size = 16
-Label/fonts/font = ExtResource("1_4xoln")
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ifeun"]
-size = Vector2(510, 350)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_1x3kl"]
-size = Vector2(237.30066, 229.51685)
-
-[node name="Main" type="Control" unique_id=1508182784 node_paths=PackedStringArray("game_timer")]
+[node name="OutsideUi" type="Control" unique_id=1742708983]
 layout_mode = 3
 anchors_preset = 0
-mouse_filter = 2
-theme = SubResource("Theme_4c57u")
-script = ExtResource("2_2well")
-game_timer = NodePath("GameTimer")
 
-[node name="MainBG" type="TextureRect" parent="." unique_id=427556133]
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1568267786]
 layout_mode = 0
-offset_left = 4.0
-offset_right = 1284.0
-offset_bottom = 640.0
-texture = ExtResource("3_eft0s")
+offset_right = 1276.0
+offset_bottom = 631.0
+texture = ExtResource("1_7it1p")
 
-[node name="Area2D" type="Area2D" parent="." unique_id=872284658]
-script = ExtResource("4_c857r")
-next_ui_scene = "uid://d6psqr1sg2cq"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=329713797]
-visible = false
-position = Vector2(637, 184)
-shape = SubResource("RectangleShape2D_ifeun")
-
-[node name="WindowNight" type="TextureRect" parent="." unique_id=1914476529]
-visible = false
+[node name="Arrow" type="TextureButton" parent="." unique_id=2097131816]
 layout_mode = 0
-offset_left = 408.0
-offset_top = 30.0
-offset_right = 868.0
-offset_bottom = 330.0
-texture = ExtResource("5_dojra")
-script = ExtResource("6_yeifc")
-
-[node name="WindowAsteroidDay" type="TextureRect" parent="." unique_id=1998248538]
-visible = false
-layout_mode = 0
-offset_left = 408.0
-offset_top = 30.0
-offset_right = 868.0
-offset_bottom = 330.0
-texture = ExtResource("7_bxmok")
-script = ExtResource("6_yeifc")
-
-[node name="WindowAsteroidNight" type="TextureRect" parent="." unique_id=449372055]
-visible = false
-layout_mode = 0
-offset_left = 408.0
-offset_top = 30.0
-offset_right = 868.0
-offset_bottom = 330.0
-texture = ExtResource("8_n5t0x")
-script = ExtResource("6_yeifc")
-
-[node name="WindowSolarFlare" type="TextureRect" parent="." unique_id=1950658587]
-visible = false
-layout_mode = 0
-offset_left = 408.0
-offset_top = 30.0
-offset_right = 868.0
-offset_bottom = 330.0
-texture = ExtResource("9_7reeq")
-script = ExtResource("6_yeifc")
-
-[node name="WindowDustStorm" type="TextureRect" parent="." unique_id=539571316]
-visible = false
-layout_mode = 0
-offset_left = 408.0
-offset_top = 30.0
-offset_right = 868.0
-offset_bottom = 330.0
-texture = ExtResource("10_uhynh")
-script = ExtResource("6_yeifc")
-
-[node name="ExtractButton" type="TextureButton" parent="." unique_id=368583381]
-layout_mode = 0
-offset_left = 641.0
-offset_top = 513.0
-offset_right = 801.0
+offset_left = 562.0
+offset_top = 529.0
+offset_right = 730.0
 offset_bottom = 673.0
-texture_normal = ExtResource("11_5d2g4")
-texture_pressed = ExtResource("12_lo0if")
-script = ExtResource("13_nhb6i")
-texture_on = ExtResource("12_lo0if")
-texture_off = ExtResource("11_5d2g4")
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("2_jwneo")
+script = ExtResource("3_tycja")
 
-[node name="ProcessButton" type="TextureButton" parent="." unique_id=1739745995]
+[node name="SolarContainer" type="GridContainer" parent="." unique_id=2116981308]
 layout_mode = 0
-offset_left = 733.0
-offset_top = 514.0
-offset_right = 893.0
-offset_bottom = 674.0
-texture_normal = ExtResource("11_5d2g4")
-texture_pressed = ExtResource("12_lo0if")
-script = ExtResource("14_vvuf8")
-texture_on = ExtResource("12_lo0if")
-texture_off = ExtResource("11_5d2g4")
+offset_left = 703.0
+offset_top = 375.0
+offset_right = 1461.0
+offset_bottom = 1051.0
+columns = 3
+script = ExtResource("4_u6c3f")
+texture_on = ExtResource("5_ap1yg")
+texture_off = ExtResource("4_q235v")
 
-[node name="StatTracker" type="Control" parent="." unique_id=34596266]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="quota" type="Label" parent="StatTracker" unique_id=754624326]
-layout_mode = 0
-offset_left = 15.0
-offset_top = 7.0
-offset_right = 125.0
-offset_bottom = 30.0
-text = "Quota : x kg"
-
-[node name="missed_quota_days" type="Label" parent="StatTracker" unique_id=1469735877]
-layout_mode = 0
-offset_left = 18.0
-offset_top = 485.0
-offset_right = 207.0
-offset_bottom = 508.0
-text = "Missed Quota For x months"
-
-[node name="regolith" type="Label" parent="StatTracker" unique_id=753022327]
-layout_mode = 0
-offset_left = 18.0
-offset_top = 509.0
-offset_right = 160.0
-offset_bottom = 532.0
-text = "Regolith amount : "
-
-[node name="battery_power" type="Label" parent="StatTracker" unique_id=1372464473]
-layout_mode = 0
-offset_left = 18.0
-offset_top = 460.0
-offset_right = 214.0
-offset_bottom = 483.0
-text = "Battery Storage : x/y kWh"
-
-[node name="power" type="Label" parent="StatTracker" unique_id=1596391681]
-layout_mode = 0
-offset_left = 19.0
-offset_top = 534.0
-offset_right = 192.0
-offset_bottom = 557.0
-text = "Current Power : x kWh"
-
-[node name="Day_night_month" type="Label" parent="StatTracker" unique_id=1676019791]
-layout_mode = 0
-offset_left = 531.0
-offset_top = 9.0
-offset_right = 791.0
-offset_bottom = 32.0
-text = "Day x of Month y (Day Time)"
-
-[node name="refined_regolith" type="Label" parent="StatTracker" unique_id=1253348999]
-layout_mode = 0
-offset_left = 18.0
-offset_top = 561.0
-offset_right = 235.0
-offset_bottom = 584.0
-text = "Refined Regolith amount :"
-
-[node name="Battery" type="Area2D" parent="." unique_id=2073264843]
-position = Vector2(1143, 566)
-scale = Vector2(1.1040846, 1.2112402)
-script = ExtResource("15_d0hux")
-
-[node name="Battery2" type="Sprite2D" parent="Battery" unique_id=947224133]
-position = Vector2(0.9057617, -120.5376)
-texture = ExtResource("16_slmpe")
-
-[node name="Battery" type="Sprite2D" parent="Battery" unique_id=1223124539]
-texture = ExtResource("16_slmpe")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Battery" unique_id=494324751]
-visible = false
-position = Vector2(-3.6229217, -61.094406)
-shape = SubResource("RectangleShape2D_1x3kl")
-
-[node name="BatteryUI" type="CanvasLayer" parent="Battery" unique_id=1193546088]
-
-[node name="Batterypopup" type="PanelContainer" parent="Battery/BatteryUI" unique_id=1451261759]
-visible = false
-offset_left = 384.0
-offset_top = 259.0
-offset_right = 898.0
-offset_bottom = 383.0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Battery/BatteryUI/Batterypopup" unique_id=1969718637]
+[node name="solarpanel1" type="TextureButton" parent="SolarContainer" unique_id=1969000232]
+custom_minimum_size = Vector2(150, 120)
 layout_mode = 2
+texture_normal = ExtResource("4_q235v")
+ignore_texture_size = true
+stretch_mode = 4
 
-[node name="Label" type="Label" parent="Battery/BatteryUI/Batterypopup/VBoxContainer" unique_id=785785940]
+[node name="solarpanel2" type="TextureButton" parent="SolarContainer" unique_id=368924349]
+custom_minimum_size = Vector2(150, 120)
 layout_mode = 2
-text = "Enter the amount you want to deposit : "
+texture_normal = ExtResource("4_q235v")
+ignore_texture_size = true
+stretch_mode = 4
 
-[node name="LineEdit" type="LineEdit" parent="Battery/BatteryUI/Batterypopup/VBoxContainer" unique_id=1241369552]
+[node name="solarpanel3" type="TextureButton" parent="SolarContainer" unique_id=1583845892]
+custom_minimum_size = Vector2(150, 120)
 layout_mode = 2
+texture_normal = ExtResource("4_q235v")
+ignore_texture_size = true
+stretch_mode = 4
 
-[node name="Button" type="Button" parent="Battery/BatteryUI/Batterypopup/VBoxContainer" unique_id=1934800185]
+[node name="solarpanel4" type="TextureButton" parent="SolarContainer" unique_id=799671783]
+custom_minimum_size = Vector2(150, 120)
 layout_mode = 2
-text = "Confirm"
+texture_normal = ExtResource("4_q235v")
+ignore_texture_size = true
+stretch_mode = 4
 
-[node name="GameTimer" type="Timer" parent="." unique_id=813742237]
-wait_time = 300.0
-autostart = true
-script = ExtResource("17_l853v")
-
-[node name="WarningControl" type="Control" parent="." unique_id=907812624]
-anchors_preset = 0
-offset_left = 1240.0
-offset_top = 1.0
-offset_right = 1280.0
-offset_bottom = 41.0
-
-[node name="WarningContainer" type="VBoxContainer" parent="WarningControl" unique_id=1424123804]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 0
-offset_left = -336.0
-offset_top = 8.0
-offset_right = -236.0
-offset_bottom = 108.0
-
-[node name="Warning" type="Label" parent="WarningControl/WarningContainer" unique_id=1053108682]
+[node name="solarpanel5" type="TextureButton" parent="SolarContainer" unique_id=1536015277]
+custom_minimum_size = Vector2(150, 120)
 layout_mode = 2
+texture_normal = ExtResource("4_q235v")
+ignore_texture_size = true
+stretch_mode = 4
 
-[connection signal="input_event" from="Area2D" to="Area2D" method="_on_input_event"]
-[connection signal="pressed" from="Battery/BatteryUI/Batterypopup/VBoxContainer/Button" to="Area2D" method="_on_deposit_confirmed"]
+[node name="solarpanel6" type="TextureButton" parent="SolarContainer" unique_id=406798473]
+custom_minimum_size = Vector2(150, 120)
+layout_mode = 2
+texture_normal = ExtResource("4_q235v")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="MinerContainer" type="Node2D" parent="." unique_id=1427738316]
+script = ExtResource("8_ahcr5")
+texture_on = ExtResource("9_yev56")
+texture_off = ExtResource("6_ap1yg")
+
+[node name="Miner1" type="TextureButton" parent="MinerContainer" unique_id=349907933]
+offset_left = 42.00001
+offset_top = 287.0
+offset_right = 344.0
+offset_bottom = 671.0
+scale = Vector2(0.4139073, 0.41015628)
+texture_normal = ExtResource("6_ap1yg")
+
+[node name="Miner2" type="TextureButton" parent="MinerContainer" unique_id=1371476023]
+offset_left = 157.0
+offset_top = 416.0
+offset_right = 459.0
+offset_bottom = 800.0
+scale = Vector2(0.4139073, 0.41015628)
+texture_normal = ExtResource("6_ap1yg")
+
+[node name="Miner3" type="TextureButton" parent="MinerContainer" unique_id=1577915578]
+offset_left = 291.0
+offset_top = 281.0
+offset_right = 593.0
+offset_bottom = 665.0
+scale = Vector2(0.4139073, 0.41015628)
+texture_normal = ExtResource("6_ap1yg")
