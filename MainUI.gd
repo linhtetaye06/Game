@@ -8,12 +8,13 @@ extends Control
 @onready var power_label: Label = $StatTracker/power
 @onready var battery_label: Label = $StatTracker/battery_power
 @onready var refined_regolith: Label = $StatTracker/refined_regolith
-@onready var warning_label = $Warning/WarningContainer
+@onready var warning_label = $WarningControl/WarningContainer/Warning
 
 func _ready() -> void: 
 	if GameProcessing : 
 		GameProcessing.stats_updated.connect(update_ui)
 		update_ui()
+	GameProcessing.display_warning.connect(show_screen_warning)
 
 func update_ui() -> void:
 	quota.text = "Quota : %d kg" % GameProcessing.quota

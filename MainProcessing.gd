@@ -2,8 +2,7 @@ class_name MoonBaseGame
 extends Node
 
 signal stats_updated 
-
-@onready var warning_label = $Warning/WarningContainer
+signal display_warning(text: String)
 
 var has_power:bool = false
 
@@ -66,18 +65,6 @@ func _init() -> void:
 		devices = GlobalData.saved_device_states
 
 
-func show_screen_warning(text: String) -> void:
-	if not warning_label:
-		return
-		
-	warning_label.text = text
-	warning_label.visible = true
-	
-	await get_tree().create_timer(5.0).timeout
-	
-	if is_instance_valid(warning_label):
-		warning_label.text = ""
-		warning_label.visible = false
 		
 func apply_wear_and_tear() -> void:
 	for dev in devices.values():
@@ -85,16 +72,17 @@ func apply_wear_and_tear() -> void:
 			dev.durability = max(0.0, dev.durability - 1.5)
 			
 func check_survival_conditions() -> bool:
-	if not devices["life_support"].device_on:
-		show_screen_warning(" GAME OVER: Life Support offline! Crew asphyxiated.")
+	if battery < 50.0:
+		display_warning.emit("💀 GAME OVER: You don't have enough battery to use life support!")
 		return false
 
+	return true
 	if not devices["food"].device_on:
 		food_off_days += 1
-		show_screen_warning(" Food Production OFF! Days without food: %d/7" % food_off_days)
+		display_warning.emit(" Food Production OFF! Days without food: %d/7" % food_off_days)
 	
 	if food_off_days > 7:
-		show_screen_warning(" GAME OVER: The crew starved!")
+		display_warning.emit(" GAME OVER: The crew starved!")
 		return false
 
 	return true
@@ -129,51 +117,51 @@ func process_mining_and_extraction(has_power: bool) -> void:
 			var refined_kg: float = consumed_raw * 0.8 
 			refined_regolith += refined_kg
 			
-			show_screen_warning("Extractor processed ore: -1.0kg raw -> +%.2fkg refined regolith (20% waste)." % refined_kg)
+			display_warning.emit("Extractor processed ore: -1.0kg raw -> +%.2fkg refined regolith (20% waste)." % refined_kg)
 		else:
-			show_screen_warning("Extractor idle: Need raw regolith!")
+			display_warning.emit("Extractor idle: Need raw regolith!")
 	
 	if devices["processor"].device_on:
 		if refined_regolith >= 500:
 			refined_regolith -= 500
 			var extracted_fuel: float = randf_range(100.0, 260.0)
 			large_battery += extracted_fuel
-			show_screen_warning("Fuel Converter produced %.1f kg of fuel." % extracted_fuel)
+			display_warning.emit("Fuel Converter produced %.1f kg of fuel." % extracted_fuel)
 		else:
-			show_screen_warning("Fuel Converter idle: Need refined regolith!")
+			display_warning.emit("Fuel Converter idle: Need refined regolith!")
 
 func burn_fuel(kg_to_burn: float) -> void:
 	if not battery_installed:
-		show_screen_warning("Standard battery required for fuel burning.")
+		display_warning.emit("Standard battery required for fuel burning.")
 		return
 		
 	if kg_to_burn <= 0 or kg_to_burn > fuel_kg:
-		show_screen_warning("Invalid fuel amount specified.")
+		display_warning.emit("Invalid fuel amount specified.")
 		return
 		
 	var energy_gained: float = kg_to_burn * 25.0
 	if battery + energy_gained > max_battery:
-		show_screen_warning("Exceeds battery capacity!")
+		display_warning.emit("Exceeds battery capacity!")
 		return
 		
 	fuel_kg -= kg_to_burn
 	battery += energy_gained
-	show_screen_warning("Burned %.1f kg fuel -> +%.1f kWh!" % [kg_to_burn, energy_gained])
+	display_warning.emit("Burned %.1f kg fuel -> +%.1f kWh!" % [kg_to_burn, energy_gained])
 
 func check_monthly_quota() -> bool:
 	if refined_regolith >= quota:
 		refined_regolith -= quota
-		show_screen_warning("Monthly quota fulfilled! Deducted %.1f kg of fuel." % quota)
+		display_warning.emit("Monthly quota fulfilled! Deducted %.1f kg of fuel." % quota)
 		month += 1
 		quota = round(quota * 1.30)
 		food_off_days = 0
 		return true
 	else:
 		total_missed_quotas += 1
-		show_screen_warning("Quota missed! (Total missed: %d/5)" % total_missed_quotas)
+		display_warning.emit("Quota missed! (Total missed: %d/5)" % total_missed_quotas)
 		
 		if total_missed_quotas >= 5:
-			show_screen_warning("GAME OVER: Missed quota 5 times total!")
+			display_warning.emit("GAME OVER: Missed quota 5 times total!")
 			return false
 			
 		month += 1
@@ -182,7 +170,7 @@ func check_monthly_quota() -> bool:
 		return true
 
 func run_day_phase(day_in_month: int) -> void:
-	show_screen_warning("--- DAY %d: Solar Active ---" % day_in_month)
+	display_warning.emit("--- DAY %d: Solar Active ---" % day_in_month)
 	
 	var total_gen: float = 0.0
 	var total_consumption: float = 0.0
@@ -199,7 +187,7 @@ func run_day_phase(day_in_month: int) -> void:
 		battery += net_power
 		if battery > max_battery:
 			var excess: float = battery - max_battery
-			show_screen_warning("⚠️ Battery overfilled! Lost %.1f kWh." % excess)
+			display_warning.emit("⚠️ Battery overfilled! Lost %.1f kWh." % excess)
 			battery = max_battery
 		elif battery < 0:
 			var deficit: float = abs(battery)
@@ -221,7 +209,7 @@ func run_day_phase(day_in_month: int) -> void:
 	
 func run_night_phase(day_in_month: int) -> void:
 	
-	show_screen_warning("--- NIGHT %d: Backup Power Active ---" % day_in_month)
+	display_warning.emit("--- NIGHT %d: Backup Power Active ---" % day_in_month)
 	
 	var total_consumption: float = 0.0
 	for dev in devices.values():
@@ -248,7 +236,7 @@ func run_night_phase(day_in_month: int) -> void:
 
 	var has_power: bool = true
 	if remaining_load > 0:
-		show_screen_warning("BLACKOUT! Batteries drained completely!")
+		display_warning.emit("BLACKOUT! Batteries drained completely!")
 		has_power = false
 	else:
 		has_power = (battery_installed and battery >= 0) or (large_battery_installed and large_battery >= 0)
@@ -293,7 +281,7 @@ func set_processor_state(is_on: bool) -> void:
 		GlobalData.saved_device_states = devices
 		stats_updated.emit()
 		print("Processor state updated to: ", is_on)
-		
+
 
 func update_power() -> void:
 	var total_gen: float = 0.0
@@ -312,7 +300,7 @@ func update_power() -> void:
 		battery += net_power
 		if battery > max_battery:
 			var excess: float = battery - max_battery
-			show_screen_warning("Battery overfilled! Lost %.1f kWh." % excess)
+			display_warning.emit("Battery overfilled! Lost %.1f kWh." % excess)
 			battery = max_battery
 		elif battery < 0:
 			var deficit: float = abs(battery)
