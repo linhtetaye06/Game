@@ -2,13 +2,12 @@ class_name GameTimer
 extends Node
 
 
-@export var game_backend: MoonBaseGame
+
 
 var month:int = 1
 
 const total_months:int = 12
 
-var is_night:bool = false
 
 
 @onready var phase_timer: Timer = Timer.new()
@@ -22,14 +21,14 @@ func _ready() -> void:
 	phase_timer.start()
 
 func _on_phase_timeout() -> void:
-	if not is_night:
-		game_backend.run_day_phase(month)
-		is_night = true
+	if not GameProcessing.is_night:
+		GameProcessing.run_day_phase(month)
+		GameProcessing.is_night = true
 	else:
-		game_backend.run_night_phase(month)
-		is_night = false
+		GameProcessing.run_night_phase(month)
+		GameProcessing.is_night = false
 		print("Month is now: ", month)
-		var quota_passed = game_backend.check_monthly_quota()
+		var quota_passed = GameProcessing.check_monthly_quota()
 		if not quota_passed:
 			phase_timer.stop()
 			return
@@ -38,4 +37,4 @@ func _on_phase_timeout() -> void:
 		if month > total_months:
 			phase_timer.stop()
 			print("VICTORY: Completed 1 full year!")
-	game_backend.stats_updated.emit()
+	GameProcessing.stats_updated.emit()

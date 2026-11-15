@@ -4,7 +4,6 @@ var power_deposit: float = 0.0
 @onready var batterypopup: Control = $BatteryUI/Batterypopup
 @onready var line_edit: LineEdit = $BatteryUI/Batterypopup/VBoxContainer/LineEdit
 @onready var confirm_button: Button = $BatteryUI/Batterypopup/VBoxContainer/Button
-@export var game_backend: MoonBaseGame
 
 func _ready() -> void:
 	if batterypopup:
@@ -22,8 +21,8 @@ func _on_deposit_confirmed() -> void:
 	if entered_text.is_valid_float():
 		
 		power_deposit = entered_text.to_float()
-		if game_backend:
-			game_backend.deposit_power(power_deposit)
+		if GameProcessing:
+			GameProcessing.deposit_power(power_deposit)
 		
 		
 		batterypopup.visible = false

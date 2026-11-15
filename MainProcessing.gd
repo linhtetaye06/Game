@@ -7,9 +7,13 @@ var total_mined:float = 0.0
 
 var month:int = 1
 
+var total_month:int = 12
+
+var is_night:bool = false
+
 var warning_label: Label = null
 
-var raw_regolith_tonnes: float = 5.0
+var raw_regolith_kg: float = 5000.0
 
 var fuel_kg: float = 50.0
 
@@ -89,37 +93,40 @@ func process_mining_and_extraction(has_power: bool) -> void:
 		return
 
 	var active_miners: int = 0
+	var total_mined: float = 0.0
 
 	for i in range(1, 4):
 		var miner_key = "miner_%d" % i
 		if devices.has(miner_key) and devices[miner_key].device_on:
-			active_miners += 1
+			active_miners+=1
+			total_mined += randf_range(2000.0, 5000.0)
 
-	if active_miners > 0:
-		var total_mined: float = 0.0
-		for i in range(active_miners):
-			total_mined += randf_range(2.0, 5.0)
+	if total_mined> 0.0:
+		raw_regolith_kg += total_mined
+		print("Mined: ", total_mined, " | Total Regolith: ", raw_regolith_kg)
+	else : 
+		print("No active miners.")
+	stats_updated.emit()
 	
-	raw_regolith_tonnes += total_mined
-	show_screen_warning(" %d active miner(s) gained %.1f tonnes of regolith." % [active_miners, total_mined])
+	print(" %d active miner(s) gained %.1f kilograms of regolith." % [active_miners, total_mined])
 		
 	if devices["extractor"].device_on:
-		if raw_regolith_tonnes >= 1.0:
-			var consumed_raw: float = 1.0
-			raw_regolith_tonnes -= consumed_raw
+		if raw_regolith_kg >= 1000.0:
+			var consumed_raw: float = 1000.0
+			raw_regolith_kg -= consumed_raw
 			
-			var refined_tonnes: float = consumed_raw * 0.8 
-			refined_regolith += refined_tonnes
+			var refined_kg: float = consumed_raw * 0.8 
+			refined_regolith += refined_kg
 			
-			show_screen_warning("Extractor processed ore: -1.0t raw -> +%.2ft refined regolith (20% waste)." % refined_tonnes)
+			show_screen_warning("Extractor processed ore: -1.0kg raw -> +%.2fkg refined regolith (20% waste)." % refined_kg)
 		else:
 			show_screen_warning("Extractor idle: Need raw regolith!")
 	
 	if devices["processor"].device_on:
-		if refined_regolith >= 0.5:
-			refined_regolith -= 0.5
-			var extracted_fuel: float = randf_range(10.0, 26.0)
-			fuel_kg += extracted_fuel
+		if refined_regolith >= 500:
+			refined_regolith -= 500
+			var extracted_fuel: float = randf_range(100.0, 260.0)
+			large_battery += extracted_fuel
 			show_screen_warning("Fuel Converter produced %.1f kg of fuel." % extracted_fuel)
 		else:
 			show_screen_warning("Fuel Converter idle: Need refined regolith!")
@@ -261,3 +268,18 @@ func set_miner_state(index: int, is_on: bool) -> void:
 		devices[device_key].device_on = is_on
 		GlobalData.saved_device_states = devices
 		stats_updated.emit()
+
+func set_extractor_state(is_on: bool) -> void:
+	if devices.has("extractor"):
+		devices["extractor"].device_on = is_on
+		GlobalData.saved_device_states = devices
+		stats_updated.emit()
+		print("Extractor state updated to: ", is_on)
+		
+func set_processor_state(is_on: bool) -> void:
+	if devices.has("processor"):
+		devices["processor"].device_on = is_on
+		GlobalData.saved_device_states = devices
+		stats_updated.emit()
+		print("Processor state updated to: ", is_on)
+		

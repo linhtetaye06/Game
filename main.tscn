@@ -7,7 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://d3w6yuuo0n6ba" path="res://Assests/Button-pressed.png" id="4_lquwl"]
 [ext_resource type="Script" uid="uid://iijk1atc833d" path="res://batteryinput.gd" id="5_7mycd"]
 [ext_resource type="Texture2D" uid="uid://bdgtkk3x7ghb2" path="res://Assests/battery.png" id="5_lquwl"]
-[ext_resource type="Script" uid="uid://q0shobxqlr8o" path="res://MainProcessing.gd" id="8_5vw27"]
+[ext_resource type="Script" uid="uid://cd7tlpuikd52o" path="res://extractbutton.gd" id="6_kek77"]
+[ext_resource type="Script" uid="uid://d1vgc5na16jlm" path="res://processbutton.gd" id="7_4c57u"]
 [ext_resource type="Script" uid="uid://byrt6gojcgw2p" path="res://gametimer.gd" id="8_kek77"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ifeun"]
@@ -16,12 +17,11 @@ size = Vector2(510, 350)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1x3kl"]
 size = Vector2(237.30066, 229.51685)
 
-[node name="Main" type="Control" unique_id=1508182784 node_paths=PackedStringArray("game_backend", "game_timer")]
+[node name="Main" type="Control" unique_id=1508182784 node_paths=PackedStringArray("game_timer")]
 layout_mode = 3
 anchors_preset = 0
 mouse_filter = 2
 script = ExtResource("1_272bh")
-game_backend = NodePath("GameProcessing")
 game_timer = NodePath("GameTimer")
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=427556133]
@@ -48,8 +48,11 @@ offset_right = 801.0
 offset_bottom = 673.0
 texture_normal = ExtResource("3_1bvp3")
 texture_pressed = ExtResource("4_lquwl")
+script = ExtResource("6_kek77")
+texture_on = ExtResource("4_lquwl")
+texture_off = ExtResource("3_1bvp3")
 
-[node name="FoodButton" type="TextureButton" parent="." unique_id=1739745995]
+[node name="ProcessButton" type="TextureButton" parent="." unique_id=1739745995]
 layout_mode = 0
 offset_left = 733.0
 offset_top = 514.0
@@ -57,6 +60,9 @@ offset_right = 893.0
 offset_bottom = 674.0
 texture_normal = ExtResource("3_1bvp3")
 texture_pressed = ExtResource("4_lquwl")
+script = ExtResource("7_4c57u")
+texture_on = ExtResource("4_lquwl")
+texture_off = ExtResource("3_1bvp3")
 
 [node name="StatTracker" type="Control" parent="." unique_id=34596266]
 anchors_preset = 0
@@ -111,11 +117,18 @@ offset_right = 759.0
 offset_bottom = 28.0
 text = "Day x of Month y (Day Time)"
 
-[node name="Battery" type="Area2D" parent="." unique_id=2073264843 node_paths=PackedStringArray("game_backend")]
+[node name="refined_regolith" type="Label" parent="StatTracker" unique_id=1253348999]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 561.0
+offset_right = 235.0
+offset_bottom = 584.0
+text = "Refined Regolith amount :"
+
+[node name="Battery" type="Area2D" parent="." unique_id=2073264843]
 position = Vector2(1143, 566)
 scale = Vector2(1.1040846, 1.2112402)
 script = ExtResource("5_7mycd")
-game_backend = NodePath("../GameProcessing")
 
 [node name="Battery2" type="Sprite2D" parent="Battery" unique_id=947224133]
 position = Vector2(0.9057617, -120.5376)
@@ -152,14 +165,10 @@ layout_mode = 2
 layout_mode = 2
 text = "Confirm"
 
-[node name="GameTimer" type="Timer" parent="." unique_id=813742237 node_paths=PackedStringArray("game_backend")]
+[node name="GameTimer" type="Timer" parent="." unique_id=813742237]
 wait_time = 300.0
 autostart = true
 script = ExtResource("8_kek77")
-game_backend = NodePath("../GameProcessing")
-
-[node name="GameProcessing" type="Node" parent="." unique_id=1803249258]
-script = ExtResource("8_5vw27")
 
 [connection signal="input_event" from="Area2D" to="Area2D" method="_on_input_event"]
 [connection signal="pressed" from="Battery/BatteryUI/Batterypopup/VBoxContainer/Button" to="Area2D" method="_on_deposit_confirmed"]

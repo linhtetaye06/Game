@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://do11x2rsufjgi" path="res://Assests/solarpanelon.png" id="5_ap1yg"]
 [ext_resource type="Texture2D" uid="uid://b2j3mongw7ccw" path="res://Assests/miners.png" id="6_ap1yg"]
 [ext_resource type="Script" uid="uid://w8jhb2oyxuai" path="res://miners.gd" id="8_ahcr5"]
-[ext_resource type="Script" uid="uid://q0shobxqlr8o" path="res://MainProcessing.gd" id="8_hb7ud"]
+[ext_resource type="Texture2D" uid="uid://lsofoelef85k" path="res://Assests/miner_shadow.png" id="9_ahcr5"]
 
 [node name="OutsideUi" type="Control" unique_id=1742708983]
 layout_mode = 3
@@ -30,7 +30,7 @@ scale = Vector2(0.5, 0.5)
 texture_normal = ExtResource("2_jwneo")
 script = ExtResource("3_tycja")
 
-[node name="SolarContainer" type="GridContainer" parent="." unique_id=2116981308 node_paths=PackedStringArray("game_backend")]
+[node name="SolarContainer" type="GridContainer" parent="." unique_id=2116981308]
 layout_mode = 0
 offset_left = 703.0
 offset_top = 375.0
@@ -38,7 +38,6 @@ offset_right = 1461.0
 offset_bottom = 1051.0
 columns = 3
 script = ExtResource("4_u6c3f")
-game_backend = NodePath("../GameProcessing")
 texture_on = ExtResource("5_ap1yg")
 texture_off = ExtResource("4_q235v")
 
@@ -84,11 +83,10 @@ texture_normal = ExtResource("4_q235v")
 ignore_texture_size = true
 stretch_mode = 4
 
-[node name="GameProcessing" type="Node" parent="." unique_id=1917865651]
-script = ExtResource("8_hb7ud")
-
 [node name="MinerContainer" type="Node2D" parent="." unique_id=1427738316]
 script = ExtResource("8_ahcr5")
+texture_on = ExtResource("9_ahcr5")
+texture_off = ExtResource("9_ahcr5")
 
 [node name="Miner1" type="TextureButton" parent="MinerContainer" unique_id=349907933]
 offset_left = 42.00001
