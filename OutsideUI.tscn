@@ -5,12 +5,14 @@
 [ext_resource type="Script" uid="uid://r5tcvemfidh" path="res://UIarrow.gd" id="3_tycja"]
 [ext_resource type="Texture2D" uid="uid://bgdokj6sg0ix2" path="res://Assests/solarpaneloff.png" id="4_q235v"]
 [ext_resource type="Script" uid="uid://bmdkpbo4g42ic" path="res://solarpanels.gd" id="4_u6c3f"]
-[ext_resource type="Texture2D" uid="uid://do11x2rsufjgi" path="res://Assests/solarpanelon.png" id="5_ap1yg"]
+[ext_resource type="Texture2D" uid="uid://dnvhfl5u4v7o2" path="res://Assests/Solar_on.png" id="5_yev56"]
 [ext_resource type="Texture2D" uid="uid://b2j3mongw7ccw" path="res://Assests/miners.png" id="6_ap1yg"]
+[ext_resource type="Texture2D" uid="uid://c0uhsblofo7jp" path="res://Assests/Solar_off.png" id="6_yev56"]
 [ext_resource type="Script" uid="uid://w8jhb2oyxuai" path="res://miners.gd" id="8_ahcr5"]
 [ext_resource type="Texture2D" uid="uid://lsofoelef85k" path="res://Assests/miner_shadow.png" id="9_ahcr5"]
+[ext_resource type="TileSet" uid="uid://bdd8dscgdt3kb" path="res://Assests/drill_tile_set.tres" id="12_bkp37"]
 
-[node name="OutsideUi" type="Control" unique_id=1742708983]
+[node name="TileMapLayer" type="Control" unique_id=1742708983]
 layout_mode = 3
 anchors_preset = 0
 
@@ -38,8 +40,8 @@ offset_right = 1461.0
 offset_bottom = 1051.0
 columns = 3
 script = ExtResource("4_u6c3f")
-texture_on = ExtResource("5_ap1yg")
-texture_off = ExtResource("4_q235v")
+texture_on = ExtResource("5_yev56")
+texture_off = ExtResource("6_yev56")
 
 [node name="solarpanel1" type="TextureButton" parent="SolarContainer" unique_id=1969000232]
 custom_minimum_size = Vector2(150, 120)
@@ -88,11 +90,11 @@ script = ExtResource("8_ahcr5")
 texture_on = ExtResource("9_ahcr5")
 texture_off = ExtResource("9_ahcr5")
 
-[node name="Miner1" type="TextureButton" parent="MinerContainer" unique_id=349907933]
-offset_left = 42.00001
-offset_top = 287.0
-offset_right = 344.0
-offset_bottom = 671.0
+[node name="Miner1" type="TextureButton" parent="MinerContainer" unique_id=161396604]
+offset_left = 33.000023
+offset_top = 289.0
+offset_right = 335.00003
+offset_bottom = 673.0
 scale = Vector2(0.4139073, 0.41015628)
 texture_normal = ExtResource("6_ap1yg")
 
@@ -111,3 +113,8 @@ offset_right = 593.0
 offset_bottom = 665.0
 scale = Vector2(0.4139073, 0.41015628)
 texture_normal = ExtResource("6_ap1yg")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1556443773]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=2052654538]
+tile_set = ExtResource("12_bkp37")
